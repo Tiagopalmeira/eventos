@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     // Fetch events from API
     axios
-      .get('https://apidata-kappa.vercel.app/eventos')
+      .get("https://apidata-kappa.vercel.app/eventos")
       .then((response) => setEvents(response.data))
       .catch((error) => console.error("Erro ao buscar eventos:", error));
   }, []);
@@ -69,6 +69,7 @@ function App() {
             .filter(
               (event) => new Date(event.startDate).getMonth() === selectedMonth
             )
+            .sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) // Ordena os eventos
             .map((event) => (
               <EventAccordion key={event.id} event={event} />
             ))}
