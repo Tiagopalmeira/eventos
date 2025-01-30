@@ -41,6 +41,14 @@ function App() {
     }
   };
 
+  // Função para formatar a data sem o efeito de fuso horário
+  const formatDate = (dateString) => {
+    // Define a hora para 12:00 no horário UTC para evitar deslocamento
+    const dataLocal = new Date(`${dateString}T12:00:00Z`);
+    // Formata a data no formato local
+    return new Date(dataLocal).toLocaleDateString();
+  };
+
   return (
     <div className="App">
       <div className="months-grid">
@@ -49,9 +57,10 @@ function App() {
             key={index}
             month={month}
             monthIndex={index}
-            events={events.filter(
-              (event) => new Date(event.startDate).getMonth() === index
-            )}
+            events={events.filter((event) => {
+              const eventDate = new Date(event.startDate);
+              return eventDate.getMonth() === index;
+            })}
             onClick={() => {
               setSelectedMonth(index);
               scrollToEvents(); // Chama a função para rolar até a parte dos eventos
@@ -66,12 +75,17 @@ function App() {
         >
           <h2>Eventos de {months[selectedMonth]}</h2>
           {events
-            .filter(
-              (event) => new Date(event.startDate).getMonth() === selectedMonth
-            )
-            .sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) // Ordena os eventos
+            .filter((event) => {
+              const eventDate = new Date(event.startDate);
+              return eventDate.getMonth() === selectedMonth;
+            })
+            .sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) // Ordena os eventos em ordem cronológica
             .map((event) => (
-              <EventAccordion key={event.id} event={event} />
+              <EventAccordion
+                key={event.id}
+                event={event}
+                formattedStartDate={formatDate(event.startDate)} // Passa a data formatada
+              />
             ))}
         </div>
       )}
