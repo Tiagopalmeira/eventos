@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     // Fetch events from API
     axios
-      .get("${apiUrl}")
+      .get(`${apiUrl}/eventos`)
       .then((response) => setEvents(response.data))
       .catch((error) => console.error("Erro ao buscar eventos:", error));
   }, []);
